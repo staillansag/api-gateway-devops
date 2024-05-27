@@ -15,6 +15,10 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
 
+    - name: Creation output directory (if needed)
+      run: |
+        mkdir -p apim
+
     - name: Export API proxy definition
       run: |
         curl -s --location --request POST "${{ vars.API_GW_URL }}/rest/apigateway/archive" \

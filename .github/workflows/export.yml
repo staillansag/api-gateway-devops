@@ -1,0 +1,51 @@
+name: webMethods API Gateway proxy export
+
+on:
+  workflow_dispatch:
+
+env:
+  API_NAMES: "CustomersAPI"
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v4
+
+    - name: Check out repository
+      run: |
+        curl --location --request POST "${{ vars.API_GW_URL }}/rest/apigateway/archive" \
+          -u ${{ secrets.API_GW_USERNAME }}:${{ secrets.API_GW_PASSWORD }}
+          --header 'x-HTTP-Method-Override: GET' \
+          --header 'Content-Type: application/json' \
+          --data-raw '{
+              "types": [
+                  "api"
+              ],
+              "scope": [
+                  {
+                      "attributeName": "apiName",
+                      "keyword": "${{ env.API_NAME }}"
+                  }
+              ],
+              "includeOptions": {
+                  "includeApplications": false
+              }
+          }' --output ${{ env.API_NAME }}.zip || exit 1
+
+    - name: Configure Git
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+    - name: Commit changes
+      run: |
+        git add .
+        git commit -m "Automated commit from GitHub Actions" || echo "No changes to commit"
+
+    - name: Push changes
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        git push origin HEAD:main

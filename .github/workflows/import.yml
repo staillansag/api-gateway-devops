@@ -17,7 +17,7 @@ jobs:
 
     - name: Import API proxy definition
       run: |
-        curl -s --location --request POST "${{ vars.TEST_API_GW_URL }}/rest/apigateway/archive" \
+        curl -s --location --request POST "${{ vars.TEST_API_GW_URL }}/rest/apigateway/archive?overwrite=apis,policies,policyactions" \
           -u ${{ secrets.TEST_API_GW_USERNAME }}:${{ secrets.TEST_API_GW_PASSWORD }} \
           --header 'accept: application/json' \
           --form 'zipFile=@"apim/${{ env.API_NAME }}.zip"' || exit 1

@@ -34,7 +34,7 @@ jobs:
               "includeOptions": {
                   "includeApplications": false
               }
-          }' --output ${{ env.API_NAME }}.zip || exit 1
+          }' --output apim/${{ env.API_NAME }}.zip || exit 1
 
     - name: Configure Git
       run: |

@@ -12,10 +12,12 @@ jobs:
     steps:
     - name: Check out repository
       uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Export API proxy definition
       run: |
-        curl --location --request POST "${{ vars.API_GW_URL }}/rest/apigateway/archive" \
+        curl -s --location --request POST "${{ vars.API_GW_URL }}/rest/apigateway/archive" \
           -u ${{ secrets.API_GW_USERNAME }}:${{ secrets.API_GW_PASSWORD }} \
           --header 'x-HTTP-Method-Override: GET' \
           --header 'Content-Type: application/json' \
@@ -48,4 +50,5 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
+        git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
         git push origin HEAD:main

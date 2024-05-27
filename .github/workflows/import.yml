@@ -1,0 +1,24 @@
+name: Deploy API proxy to Test
+
+on:
+  workflow_dispatch:
+
+env:
+  API_NAME: "CustomersAPI"
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Import API proxy definition
+      run: |
+        curl -s --location --request POST "${{ vars.TEST_API_GW_URL }}/rest/apigateway/archive" \
+          -u ${{ secrets.TEST_API_GW_USERNAME }}:${{ secrets.TEST_API_GW_PASSWORD }} \
+          --header 'accept: application/json' \
+          --form 'zipFile=@"apim/${{ env.API_NAME }}.zip"' || exit 1
+

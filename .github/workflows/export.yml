@@ -1,4 +1,4 @@
-name: webMethods API Gateway proxy export
+name: API proxy export
 
 on:
   workflow_dispatch:

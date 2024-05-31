@@ -1,4 +1,4 @@
-name: Deploy API proxy to Test
+name: API proxy import
 
 on:
   workflow_dispatch:
